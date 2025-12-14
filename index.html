@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Guessing Game</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background: black;
+  margin: 0;
+}
+
+header, footer{
+  background: lightgreen;
+  color: black;
+  text-align: center;
+  padding: 20px;
+}
+
+.container{
+  max-width: 600px;
+  margin: 50px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+}
+
+input{
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 1em;
+}
+
+button{
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #35424a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover{
+  background: #45a049;
+}
+
+#hiddenNumber{
+  font-size: 3em;
+  text-align: center;
+  margin: 15px 0;
+}
+
+#message{
+  font-weight: bold;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎯 Number Guessing Game</h1>
+  <h3>Created by Wilfran Luis Decena</h3>
+</header>
+
+<div class="container">
+
+  <h2 style="text-align:center;">Secret Number</h2>
+
+  <!-- Hidden Number -->
+  <div id="hiddenNumber">🔒</div>
+
+  <p>Attempts left: <span id="attempts">5</span></p>
+
+  <input type="number" id="numberInput"
+         min="1" max="100"
+         placeholder="Enter a number between 1 and 100">
+
+  <button onclick="checkNumber()">Check</button>
+  <button onclick="resetGame()">Reset</button>
+
+  <p id="message"></p>
+</div>
+
+<footer>
+  Created by Wilfran Luis Decena
+</footer>
+
+<script>
+let secretNumber;
+let attempts;
+
+/* RESET GAME */
+function resetGame(){
+  secretNumber = Math.floor(Math.random() * 100) + 1;
+  attempts = 5;
+
+  document.getElementById("attempts").textContent = attempts;
+  document.getElementById("hiddenNumber").textContent = "🔒";
+  document.getElementById("message").textContent = "";
+  document.getElementById("numberInput").value = "";
+  document.getElementById("numberInput").disabled = false;
+}
+
+/* CHECK NUMBER */
+function checkNumber(){
+  const input = document.getElementById("numberInput");
+  const value = Number(input.value);
+
+  if(!value || value < 1 || value > 100){
+    document.getElementById("message").textContent =
+      "⛔ Please enter a valid number between 1 and 100.";
+    return;
+  }
+
+  attempts--;
+  document.getElementById("attempts").textContent = attempts;
+
+  if(value === secretNumber){
+    document.getElementById("hiddenNumber").textContent = secretNumber;
+    document.getElementById("message").textContent =
+      "🎉 Congratulations! You guessed the number!";
+    input.disabled = true;
+  }
+  else if(attempts === 0){
+    document.getElementById("hiddenNumber").textContent = secretNumber;
+    document.getElementById("message").textContent =
+      "❌ Game over! The number was " + secretNumber + ".";
+    input.disabled = true;
+  }
+  else if(value < secretNumber){
+    document.getElementById("message").textContent = "📉 Too low!";
+  }
+  else{
+    document.getElementById("message").textContent = "📈 Too high!";
+  }
+}
+
+/* INIT */
+window.onload = resetGame;
+</script>
+
+</body>
+</html>
